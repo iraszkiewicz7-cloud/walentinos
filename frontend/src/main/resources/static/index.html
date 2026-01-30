@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Moja Aplikacja - Lab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 90%;
+        }
+        h1 { color: #333; margin-bottom: 10px; text-align: center; }
+        p { color: #666; text-align: center; margin-bottom: 20px; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background: #764ba2; }
+        ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+        li {
+            background: #f5f5f5;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .error { color: red; margin-top: 10px; }
+        .loading { color: #667eea; font-style: italic; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Inżynieria Oprogramowania</h1>
+    <p>Zrealizowane laboratorium 13-14</p>
+    <button onclick="pobierzDane()">Pokaż wylosowane</button>
+    <div id="status"></div>
+    <ul id="lista"></ul>
+</div>
+
+<script>
+    // TUTAJ WKLEISZ URL BACKENDU PO DEPLOYU
+    const API_URL = "http://localhost:8080/api/wykonawcy"; // Na razie localhost do testów
+
+    async function pobierzDane() {
+        const status = document.getElementById('status');
+        const lista = document.getElementById('lista');
+
+        status.innerHTML = '<p class="loading">Ładowanie...</p>';
+        lista.innerHTML = '';
+
+        try {
+            const response = await fetch(API_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const dane = await response.json();
+            status.innerHTML = '';
+
+            dane.forEach(osoba => {
+                const li = document.createElement('li');
+                li.textContent = `${osoba.name} ${osoba.surname}`;
+                lista.appendChild(li);
+            });
+        } catch (err) {
+            status.innerHTML = `<p class="error">Błąd: ${err.message}</p>`;
+            console.error("Błąd pobierania:", err);
+        }
+    }
+</script>
+</body>
+</html>
