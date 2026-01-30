@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 Walentynki 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #f67280 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animowane serduszka w tle */
+        .heart-bg {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.3;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Główny kontener */
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Duże serduszko do kliknięcia */
+        .big-heart {
+            font-size: 120px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.3s;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .big-heart:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        /* Ukryta treść */
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            color: #c06c84;
+            margin: 20px 0;
+            font-size: 28px;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        /* Przyciski */
+        button {
+            padding: 15px 40px;
+            margin: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-yes {
+            background: #ff6b9d;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background: #ff4081;
+            transform: scale(1.1);
+        }
+
+        .btn-no {
+            background: #ddd;
+            color: #666;
+        }
+
+        .btn-no:hover {
+            background: #ccc;
+        }
+
+        /* Smutna buźka */
+        .sad-face {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+
+        /* Konfetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b9d;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Serduszka w tle -->
+<div class="heart-bg" style="top: 10%; left: 10%;">💕</div>
+<div class="heart-bg" style="top: 20%; right: 15%; animation-delay: 1s;">💖</div>
+<div class="heart-bg" style="bottom: 15%; left: 20%; animation-delay: 2s;">💗</div>
+<div class="heart-bg" style="bottom: 25%; right: 10%; animation-delay: 1.5s;">💝</div>
+
+<div class="container">
+    <!-- Ekran 1: Duże serduszko -->
+    <div id="screen1">
+        <h1>Kliknij w serduszko 💝</h1>
+        <div class="big-heart" onclick="openHeart()">❤️</div>
+    </div>
+
+    <!-- Ekran 2: Pytanie -->
+    <div id="screen2" class="hidden">
+        <h1>Zostaniesz moją walentynką? 💕</h1>
+        <button class="btn-yes" onclick="answerYes()">Tak! 💖</button>
+        <button class="btn-no" onclick="answerNo()">Nie</button>
+    </div>
+
+    <!-- Ekran 3: Odpowiedź TAK -->
+    <div id="screen3" class="hidden">
+        <h1>🎉 Cudownie! 🎉</h1>
+        <p style="font-size: 22px; color: #ff6b9d;">Miłego dnia, kocham Cię</p>
+        <p style="font-size: 20px; color: #c06c84; margin-top: 10px;">~ Twój Igor 💕</p>
+    </div>
+
+    <!-- Ekran 4: Odpowiedź NIE (pierwsze kliknięcie) -->
+    <div id="screen4" class="hidden">
+        <h1>Na pewno? 🥺</h1>
+        <button class="btn-yes" onclick="finalNo()">Tak! 💖</button>
+        <button class="btn-no" onclick="answerYes()">Nie</button>
+    </div>
+
+    <!-- Ekran 5: Odpowiedź NIE (drugie kliknięcie) -->
+    <div id="screen5" class="hidden">
+        <div class="sad-face">😢</div>
+        <h1 style="color: #888;">Zła odpowiedź...</h1>
+    </div>
+</div>
+
+<script>
+    function openHeart() {
+        // Efekt "otwarcia" serduszka
+        document.getElementById('screen1').classList.add('hidden');
+        document.getElementById('screen2').classList.remove('hidden');
+        createConfetti();
+    }
+
+    function answerYes() {
+        document.getElementById('screen2').classList.add('hidden');
+        document.getElementById('screen4').classList.add('hidden');
+        document.getElementById('screen3').classList.remove('hidden');
+        createConfetti();
+    }
+
+    function answerNo() {
+        document.getElementById('screen2').classList.add('hidden');
+        document.getElementById('screen4').classList.remove('hidden');
+    }
+
+    function finalNo() {
+        document.getElementById('screen4').classList.add('hidden');
+        document.getElementById('screen5').classList.remove('hidden');
+    }
+
+    function createConfetti() {
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = ['#ff6b9d', '#c06c84', '#f67280', '#ffd700'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }, i * 30);
+        }
+    }
+</script>
+</body>
+</html>
